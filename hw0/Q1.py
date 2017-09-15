@@ -1,4 +1,6 @@
-inputFile = open('words.txt', 'r')
+import sys
+
+inputFile = open(sys.argv[1], 'r')
 outputFile = open('Q1.txt', 'w')
 s = inputFile.read()
 s = s.split()
