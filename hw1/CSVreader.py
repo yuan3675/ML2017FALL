@@ -12,6 +12,8 @@ class CSVreader:
             for row in reader:
                 del row[1]
                 if row[1] == 'PM2.5':
+                    del row[0]
+                    del row[0]
                     self.trainList.append(row)
             return(self.trainList)
 
@@ -20,7 +22,10 @@ class CSVreader:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if row[1] == 'PM2.5':
+                    del row[1]
                     self.testList.append(row)
             return(self.testList)
+
+
 
 
