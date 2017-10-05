@@ -1,4 +1,5 @@
 import sys
+import csv
 import pandas as pd
 import numpy as np
 import CSVreader
@@ -15,44 +16,57 @@ def hypoFunction(parameters, data):
 
 def costFunction(predictValue, actualValue):
     error = (predictValue - actualValue)**2
-    result = 0
-    m = 0
-    for i  in error:
-        result = result + i
-        m = m + 1
-    return result/(2*m)
+    return np.sum(error)
 
 
 #get data
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
 data = pd.DataFrame(reader.readTrain(sys.argv[1]))
+test = pd.DataFrame(reader.readTest(sys.argv[2]))
+"""
 trainData = process.getTrain(data)
-validData = process.getValid(data)
-trainSet = trainData.iloc[:, :9]
-trainSet = process.addone(trainSet).values
-trainTargetSet = trainData.iloc[:, 9:].values
-trainSet = np.array(trainSet).astype(float)
-trainTargetSet = np.array(trainTargetSet).astype(float)
-validSet = validData.iloc[:, :9]
-validSet = process.addone(validSet).values
-validTargetSet = validData.iloc[:, 9:].values
-validSet = np.array(validSet).astype(float)
-validTargetSet = np.array(validTargetSet).astype(float)
+#validData = process.getValid(data)
+testData = process.getTest(test)
+
+trainSet = process.getDataSet(trainData)
+trainTargetSet = process.getTargetSet(trainData)
+
+#validSet = process.getDataSet(validData)
+#validTargetSet = process.getTargetSet(validData)
 
 #train
-m = trainTargetSet.size
+train_m = trainTargetSet.size
+#valid_m = validTargetSet.size
 n = 10
+
 for i in range(iteration):
     predictValue = hypoFunction(parameter, trainSet)
-    costFunction(predictValue, trainTargetSet.astype(float))
+    #errorRate = (costFunction(predictValue, trainTargetSet))/train_m * 50
     parameter = parameter - learningRate * np.dot(np.transpose(trainSet), (predictValue - trainTargetSet))
-    if(i % 100 == 0):
-        print(i,'round')
+    if(i % 500 == 0):
+        errorRate = (costFunction(predictValue, trainTargetSet))/train_m * 50
+        print(i,'training error rate:', errorRate, '%')
 
-#compute training error
+
+
+#compute validation error rate
 predictValue = hypoFunction(parameter, validSet)
-for i in predictValue:
-    print(i)
-#compute validation error
-    
+errorRate = (costFunction(predictValue, validTargetSet))/valid_m * 100
+print('Validation error rate=', errorRate, '%')
+
+#print(parameter)
+
+#compute test
+predictValue = hypoFunction(parameter, testData)
+with open('testOutput.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile, delimiter=',',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    index = 0
+    csvHeader = ['id','value']
+    writer.writerow(csvHeader)
+    for i in predictValue:
+        writer.writerow(['id_'+str(index), i[0]])
+        index = index + 1
+
+"""

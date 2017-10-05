@@ -1,6 +1,7 @@
 import sys
 import csv
 
+
 class CSVreader:
     def __init__(self):
         self.trainList = []
@@ -10,20 +11,18 @@ class CSVreader:
         with open(filename, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
-                del row[1]
-                if row[1] == 'PM2.5':
-                    del row[0]
-                    del row[0]
-                    self.trainList.append(row)
+                del row[0]
+                del row[0]
+                self.trainList.append(row)
+            del self.trainList[0]
             return(self.trainList)
-
+        
     def readTest(self, filename):
         with open(filename, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
-                if row[1] == 'PM2.5':
-                    del row[1]
-                    self.testList.append(row)
+                del row[0]
+                self.testList.append(row)
             return(self.testList)
 
 
