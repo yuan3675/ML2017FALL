@@ -6,7 +6,7 @@ import dataProcessing
 
 #define parameters
 iteration = 10000
-learningRate = 0.001
+learningRate = 0.000001
 parameter = np.array([[0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1]])
 
 def hypoFunction(parameters, data):
@@ -22,10 +22,7 @@ def costFunction(predictValue, actualValue):
         m = m + 1
     return result/(2*m)
 
-"""    
-def gradientDescent(parameters, m):
-        parameters = parameters - (learningRate / m)
-"""
+
 #get data
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
@@ -35,11 +32,27 @@ validData = process.getValid(data)
 trainSet = trainData.iloc[:, :9]
 trainSet = process.addone(trainSet).values
 trainTargetSet = trainData.iloc[:, 9:].values
+trainSet = np.array(trainSet).astype(float)
+trainTargetSet = np.array(trainTargetSet).astype(float)
+validSet = validData.iloc[:, :9]
+validSet = process.addone(validSet).values
+validTargetSet = validData.iloc[:, 9:].values
+validSet = np.array(validSet).astype(float)
+validTargetSet = np.array(validTargetSet).astype(float)
 
 #train
-#for i in iteration:
-trainSet = np.array(trainSet)
-trainTargetSet = np.array(trainTargetSet)
-predictValue = hypoFunction(parameter, trainSet.astype(float))
-print(costFunction(predictValue, trainTargetSet.astype(float)))
+m = trainTargetSet.size
+n = 10
+for i in range(iteration):
+    predictValue = hypoFunction(parameter, trainSet)
+    costFunction(predictValue, trainTargetSet.astype(float))
+    parameter = parameter - learningRate * np.dot(np.transpose(trainSet), (predictValue - trainTargetSet))
+    if(i % 100 == 0):
+        print(i,'round')
+
+#compute training error
+predictValue = hypoFunction(parameter, validSet)
+for i in predictValue:
+    print(i)
+#compute validation error
     
