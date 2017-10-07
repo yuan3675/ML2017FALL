@@ -32,7 +32,8 @@ class dataProcessing:
                 i = 0.0
         SQdata = data
         for i in np.nditer(SQdata):
-            i = i**2
+            if i >= 0:
+                i = math.sqrt(i)
         data = pd.DataFrame(data)
         SQdata = pd.DataFrame(SQdata)
         data = [data, SQdata]
@@ -48,7 +49,8 @@ class dataProcessing:
                 i = 0.0
         SQdata = data
         for i in np.nditer(SQdata):
-            i = i**2
+            if i >= 0:
+                i = math.sqrt(i)
         data = pd.DataFrame(data)
         SQdata = pd.DataFrame(SQdata)
         data = [data, SQdata]

@@ -8,7 +8,7 @@ import dataProcessing
 
 #define parameters
 iteration = 500000
-learningRate = 0.0002
+learningRate = 0.0001
 parameter = np.array([[0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]
                       , [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]])
 
@@ -17,9 +17,9 @@ def hypoFunction(parameters, data):
     predictValue = np.dot(data, parameters)
     return predictValue
 
-def errorRateFunction(predictValue, actualValue):
+def costFunction(predictValue, actualValue, m):
     error = (predictValue - actualValue)**2
-    return math.sqrt(np.sum(error))
+    return np.sum(error)/(2*m)
 
 
 #get data
@@ -47,8 +47,8 @@ n = 10
 for i in range(iteration):
     predictValue = hypoFunction(parameter, trainSet)
     parameter = parameter - learningRate * np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m
-    if i % 1000 == 0:
-        errorRate = errorRateFunction(predictValue, trainTargetSet)
+    if i % 10000 == 0:
+        errorRate = costFunction(predictValue, trainTargetSet, train_m)
         print(i,'training error:', errorRate)
         
 
@@ -59,9 +59,12 @@ for i in range(iteration):
 #errorRate = (costFunction(predictValue, validTargetSet))/valid_m * 100
 #print('Validation error rate=', errorRate, '%')
 
-#print(parameter)
-#print(predictValue, trainTargetSet)
-
+with open('parameters.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile, delimiter=',',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    for i in parameter:
+        writer.writerow([i])
+    csvfile.close()
 
 #compute test
 predictValue = hypoFunction(parameter, testData)
@@ -74,6 +77,6 @@ with open('testOutput.csv', 'w', newline='') as csvfile:
     for i in predictValue:
         writer.writerow(['id_'+str(index), i[0]])
         index = index + 1
-
+    csvfile.close()
 
 
