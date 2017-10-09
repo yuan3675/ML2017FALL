@@ -26,36 +26,46 @@ class dataProcessing:
         return data
     
     def getTest(self, data):
+        #data = self.addone(data).values
         data = np.array(data).astype(float)
         for i in np.nditer(data):
             if i < 0:
                 i = 0.0
+        """
         SQdata = data
         for i in np.nditer(SQdata):
             if i >= 0:
-                i = math.sqrt(i)
+                i = i**2
         data = pd.DataFrame(data)
         SQdata = pd.DataFrame(SQdata)
         data = [data, SQdata]
         data = pd.concat(data, axis = 1)
-        data = self.addone(data).values
+        """
+        #data = self.addone(data).values
+        #data = np.array(data).astype(float)
+
         return data
     
     def getDataSet(self, data):
         data = data.iloc[:, :9]
+        #data = self.addone(data).values
         data = np.array(data).astype(float)
         for i in np.nditer(data):
             if i < 0:
                 i = 0.0
+        """
         SQdata = data
         for i in np.nditer(SQdata):
             if i >= 0:
-                i = math.sqrt(i)
+                i = i**2
         data = pd.DataFrame(data)
         SQdata = pd.DataFrame(SQdata)
         data = [data, SQdata]
         data = pd.concat(data, axis = 1)
-        data = self.addone(data).values
+        """
+        #data = self.addone(data).values
+        #data = np.array(data).astype(float)
+        
         return data
 
     def getTargetSet(self, data):
