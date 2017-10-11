@@ -7,13 +7,12 @@ import CSVreader
 import dataProcessing
 
 #define parameters
-iteration = 500000
+iteration = 100001
 learningRate = 0.0001
-parameter = np.array([[0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]
-                      , [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]])
+parameter = np.array([[0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05],
+                      [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05]])
 
 def hypoFunction(parameters, data):
-    #print(data.shape, parameters.shape)
     predictValue = np.dot(data, parameters)
     return predictValue
 
@@ -26,12 +25,12 @@ def costFunction(predictValue, actualValue, m):
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
 data = pd.DataFrame(reader.readTrain(sys.argv[1]))
-test = pd.DataFrame(reader.readTest(sys.argv[2]))
+outputName = sys.argv[2]
 
 
 trainData = process.getTrain(data)
 #validData = process.getValid(data)
-testData = process.getTest(test)
+
 
 trainSet = process.getDataSet(trainData)
 trainTargetSet = process.getTargetSet(trainData)
@@ -59,24 +58,11 @@ for i in range(iteration):
 #errorRate = (costFunction(predictValue, validTargetSet))/valid_m * 100
 #print('Validation error rate=', errorRate, '%')
 
-with open('parameters.csv', 'w', newline='') as csvfile:
+#store parameters
+with open(outputName, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
     for i in parameter:
-        writer.writerow([i])
+        writer.writerow([i[0]])
     csvfile.close()
-
-#compute test
-predictValue = hypoFunction(parameter, testData)
-with open('testOutput.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile, delimiter=',',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    index = 0
-    csvHeader = ['id','value']
-    writer.writerow(csvHeader)
-    for i in predictValue:
-        writer.writerow(['id_'+str(index), i[0]])
-        index = index + 1
-    csvfile.close()
-
 

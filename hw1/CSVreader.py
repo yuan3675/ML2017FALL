@@ -6,6 +6,7 @@ class CSVreader:
     def __init__(self):
         self.trainList = []
         self.testList = []
+        self.parameterList = []
         
     def readTrain(self, filename):
         with open(filename, newline='') as csvfile:
@@ -28,6 +29,12 @@ class CSVreader:
                     self.testList.append(row)
             return(self.testList)
 
+    def readParameters(self, filename):
+        with open(filename, newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                self.parameterList.append(float(row[0]))
+            return(self.parameterList)
 
 
 
