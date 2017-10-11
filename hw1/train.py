@@ -9,8 +9,7 @@ import dataProcessing
 #define parameters
 iteration = 100001
 learningRate = 0.0001
-parameter = np.array([[0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05],
-                      [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05]])
+parameter = np.array([[0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1]])
 
 def hypoFunction(parameters, data):
     predictValue = np.dot(data, parameters)
@@ -29,19 +28,19 @@ outputName = sys.argv[2]
 
 
 trainData = process.getTrain(data)
-#validData = process.getValid(data)
+validData = process.getValid(data)
 
 
 trainSet = process.getDataSet(trainData)
 trainTargetSet = process.getTargetSet(trainData)
 
-#validSet = process.getDataSet(validData)
-#validTargetSet = process.getTargetSet(validData)
+validSet = process.getDataSet(validData)
+validTargetSet = process.getTargetSet(validData)
 
 #train
 train_m = trainTargetSet.size
-#valid_m = validTargetSet.size
-n = 10
+valid_m = validTargetSet.size
+
 
 for i in range(iteration):
     predictValue = hypoFunction(parameter, trainSet)
@@ -54,9 +53,9 @@ for i in range(iteration):
 
 
 #compute validation error rate
-#predictValue = hypoFunction(parameter, validSet)
-#errorRate = (costFunction(predictValue, validTargetSet))/valid_m * 100
-#print('Validation error rate=', errorRate, '%')
+predictValue = hypoFunction(parameter, validSet)
+errorRate = costFunction(predictValue, validTargetSet, valid_m)
+print('Validation error =', errorRate)
 
 #store parameters
 with open(outputName, 'w', newline='') as csvfile:

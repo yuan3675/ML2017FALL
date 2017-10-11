@@ -15,14 +15,13 @@ class dataProcessing:
         return data
 
     def getValid(self, data):
-        data = data.drop(data.columns[20:24], axis=1)
-        data = data.iloc[:, 10:]
-        data = data.drop(data.index[:96])
-        data.columns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        index = []
-        for i in range(144):
-            index.append(i)
-        data.index = index
+        dataList = []
+        dataList.append(data.iloc[:, 14:24])
+        
+        for i in dataList:
+            i.columns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+       
+        data = pd.concat(dataList, axis=0)
         return data
     
     def getTest(self, data):
@@ -31,19 +30,24 @@ class dataProcessing:
         for i in np.nditer(data):
             if i < 0:
                 i = 0.0
-        
+        """
         SQdata = data
         for i in np.nditer(SQdata):
             if i >= 0:
-                i = math.sqrt(i)
+                i = i**2
+        TRIdata = data
+        for i in np.nditer(TRIdata):
+            if i >= 0:
+                i = i**3
         data = pd.DataFrame(data)
         SQdata = pd.DataFrame(SQdata)
-        data = [data, SQdata]
+        TRIdata = pd.DataFrame(TRIdata)
+        data = [data, SQdata, TRIdata]
         data = pd.concat(data, axis = 1)
         
         #data = self.addone(data).values
         data = np.array(data).astype(float)
-        
+        """
         return data
     
     def getDataSet(self, data):
@@ -53,19 +57,24 @@ class dataProcessing:
         for i in np.nditer(data):
             if i < 0:
                 i = 0.0
-        
+        """
         SQdata = data
         for i in np.nditer(SQdata):
             if i >= 0:
-                i = math.sqrt(i)
+                i = i**2
+        TRIdata = data
+        for i in np.nditer(TRIdata):
+            if i >= 0:
+                i = i**3
         data = pd.DataFrame(data)
         SQdata = pd.DataFrame(SQdata)
-        data = [data, SQdata]
+        TRIdata = pd.DataFrame(TRIdata)
+        data = [data, SQdata, TRIdata]
         data = pd.concat(data, axis = 1)
         
         #data = self.addone(data).values
         data = np.array(data).astype(float)
-        
+        """
         return data
 
     def getTargetSet(self, data):
