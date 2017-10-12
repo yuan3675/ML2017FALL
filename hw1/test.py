@@ -14,7 +14,7 @@ processer = dataProcessing.dataProcessing()
 parameter = np.array(reader.readParameters('parameters-first_ten_hours_sqrt.csv')).astype(float)
 
 test = pd.DataFrame(reader.readTest(sys.argv[1]))
-testData = processer.getTest(test)
+testData = processer.getTestHw1(test)
 outputName = sys.argv[2]
 
 predictValue = hypoFunction(parameter, testData)
