@@ -31,6 +31,9 @@ outputName = sys.argv[2]
 trainData = process.getTrain(data)
 validData = process.getValid(data)
 
+trainData = process.dealALLFeatures(trainData)
+validData = process.dealALLFeatures(validData)
+
 
 trainSet = process.getDataSet(trainData)
 trainTargetSet = process.getTargetSet(trainData)

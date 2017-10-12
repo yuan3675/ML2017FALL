@@ -3,6 +3,12 @@ import numpy as np
 import math
 
 class dataProcessing:
+    def dealALLFeatures(self, data):
+        concatList = []
+        returnList = []
+        target = data.iloc[:, 9:]
+        test = data.iloc[:, 0:9]
+        
     def getTrain(self, data):
         dataList = []
         for i in range(1):
