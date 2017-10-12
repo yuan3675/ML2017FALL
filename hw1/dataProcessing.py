@@ -47,7 +47,7 @@ class dataProcessing:
         data = [data, SQdata]
         data = pd.concat(data, axis = 1)
         
-        #data = self.addone(data).values
+        data = self.addone(data).values
         data = np.array(data).astype(float)
         
         return data
