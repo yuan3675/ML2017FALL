@@ -9,7 +9,8 @@ import dataProcessing
 #define parameters
 iteration = 100001
 learningRate = 0.0001
-parameter = np.array([[0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1], [0.1]])
+parameter = np.array([[0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05],
+                      [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05]])
 
 def hypoFunction(parameters, data):
     predictValue = np.dot(data, parameters)

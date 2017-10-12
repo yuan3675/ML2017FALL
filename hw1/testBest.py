@@ -11,7 +11,7 @@ def hypoFunction(parameters, data):
 
 reader = CSVreader.CSVreader()
 processer = dataProcessing.dataProcessing()
-parameter = np.array(reader.readParameters('parameters-first_ten_hours_sqrt.csv')).astype(float)
+parameter = np.array(reader.readParameters('parameters-first_ten_hours_sqrt_without_bias.csv')).astype(float)
 
 test = pd.DataFrame(reader.readTest(sys.argv[1]))
 testData = processer.getTest(test)
