@@ -8,9 +8,16 @@ import dataProcessing
 
 #define parameters
 iteration = 100001
-learningRate = 0.0001
-parameter = np.array([[0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05],
-                      [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05], [0.05]])
+learningRate = 0.000001
+parameter = np.array([[0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]])
 
 def hypoFunction(parameters, data):
     predictValue = np.dot(data, parameters)
@@ -29,21 +36,17 @@ outputName = sys.argv[2]
 
 
 trainData = process.getTrain(data)
-validData = process.getValid(data)
-
-trainData = process.dealALLFeatures(trainData)
-validData = process.dealALLFeatures(validData)
-
+#validData = process.getValid(data)
 
 trainSet = process.getDataSet(trainData)
 trainTargetSet = process.getTargetSet(trainData)
 
-validSet = process.getDataSet(validData)
-validTargetSet = process.getTargetSet(validData)
+#validSet = process.getDataSet(validData)
+#validTargetSet = process.getTargetSet(validData)
 
 #train
 train_m = trainTargetSet.size
-valid_m = validTargetSet.size
+#valid_m = validTargetSet.size
 
 
 for i in range(iteration):
@@ -55,11 +58,12 @@ for i in range(iteration):
         
 
 
-
+"""
 #compute validation error rate
 predictValue = hypoFunction(parameter, validSet)
 errorRate = costFunction(predictValue, validTargetSet, valid_m)
 print('Validation error =', errorRate)
+"""
 
 #store parameters
 with open(outputName, 'w', newline='') as csvfile:
