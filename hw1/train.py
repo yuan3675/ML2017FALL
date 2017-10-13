@@ -7,25 +7,27 @@ import CSVreader
 import dataProcessing
 
 #define parameters
+Lambda = 0.0001
 iteration = 100001
-learningRate = 0.000001
-parameter = np.array([[0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
-                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]])
+learningRate = 0.000003
+parameter = np.array([[0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01],
+                      [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01], [0.01]]).astype(float)
 
 def hypoFunction(parameters, data):
     predictValue = np.dot(data, parameters)
     return predictValue
 
-def costFunction(predictValue, actualValue, m):
+def costFunction(predictValue, actualValue, m, para):
     error = (predictValue - actualValue)**2
-    return np.sum(error)/(2*m)
+    reg = np.sum(para**2) * Lambda
+    return (np.sum(error) + reg)/(2*m)
 
 
 #get data
@@ -48,12 +50,16 @@ trainTargetSet = process.getTargetSet(trainData)
 train_m = trainTargetSet.size
 #valid_m = validTargetSet.size
 
+print('trainSet size:', trainSet.shape)
+print('targetSet size', trainTargetSet.shape)
 
 for i in range(iteration):
     predictValue = hypoFunction(parameter, trainSet)
-    parameter = parameter - learningRate * np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m
+    parameterL = parameter
+    parameterL[0][0] = 0
+    parameter = parameter - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
     if i % 10000 == 0:
-        errorRate = costFunction(predictValue, trainTargetSet, train_m)
+        errorRate = costFunction(predictValue, trainTargetSet, train_m, parameter)
         print(i,'training error:', errorRate)
         
 
@@ -64,7 +70,7 @@ predictValue = hypoFunction(parameter, validSet)
 errorRate = costFunction(predictValue, validTargetSet, valid_m)
 print('Validation error =', errorRate)
 """
-
+print(parameter.shape)
 #store parameters
 with open(outputName, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
