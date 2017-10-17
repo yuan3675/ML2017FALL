@@ -8,8 +8,9 @@ class dataProcessing:
             std = np.std(data[:,i])
             mean = np.mean(data[:,i])
             #print('column',i,'std:',std,'mean:',mean)
-            for j in range(len(data[:,i])):    
-                data[j,i] = (data[j,i] - mean) / std
+            if std != 0:
+                for j in range(len(data[:,i])):    
+                    data[j,i] = (data[j,i] - mean) / std
         return data
     
     def getTrain(self, data):
