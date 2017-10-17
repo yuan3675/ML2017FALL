@@ -8,22 +8,30 @@ import dataProcessing
 
 #define parameters
 Lambda = 0.0001
-iteration = 10001
-learningRate = 0.000001
+iteration = 5001
+learningRate = 0.0000001
 weights = np.random.random((106, 1))
 outputName = sys.argv[3]
-					  
+threshold = 0.5				  
 bias = 0.005
 
 def sigmoid(z):
         z = -1 * z
         return 1/(1+np.exp(z))
 	
-def hypoFunction(weights, bias, data):
-        z = np.dot(data, weights) + bias
+def hypoFunction(weights, data):
+        z = np.dot(data, weights)
         return sigmoid(z)
 
-def errorFunction(predictValue, actualValue):
+def transformValue(threshold, value):
+        for i in range(len(value)):
+                if value[i] > threshold:
+                        value[i] = 1
+                else:
+                        value[i] = 0
+        return value
+
+def accuracyFunction(predictValue, actualValue):
 	totalNum = predictValue.shape
 	counter = 0
 	for i in range(totalNum[0]):
@@ -39,17 +47,23 @@ Y_train = reader.readY_Train(sys.argv[2])
 X_train = np.array(X_train).astype(float)
 Y_train = np.array(Y_train).astype(float)
 X_train = process.normalize(X_train)
-print(Y_train)
 
+"""
+#k-fold validation
+for j in range(k):
+"""        
+
+#gradient descent
 for i in range(iteration):
-        predictValue = hypoFunction(weights, bias, X_train)
+        predictValue = hypoFunction(weights, X_train)
+        predictValue = transformValue(threshold, predictValue)
         parameterL = weights
         parameterL[0][0] = 0
         weights = weights - learningRate * np.dot(np.transpose(X_train), (predictValue - Y_train))
         #weights = weights - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
         if i % 1000 == 0:
-                errorRate = errorFunction(predictValue, Y_train)
-                print(i,'training error:', errorRate)
+                accuracy = accuracyFunction(predictValue, Y_train)
+                print(i,'training accuracy:', accuracy)
         
 
 
