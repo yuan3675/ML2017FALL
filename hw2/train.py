@@ -8,7 +8,7 @@ import dataProcessing
 
 #define parameters
 Lambda = 0.0001
-iteration = 5001
+iteration = 10001
 learningRate = 0.0000001
 weights = np.random.random((106, 1))
 outputName = sys.argv[3]
@@ -20,7 +20,7 @@ def sigmoid(z):
         return 1/(1+np.exp(z))
 	
 def hypoFunction(weights, data):
-        z = np.dot(data, weights)
+        z = np.dot(data, weights) + bias
         return sigmoid(z)
 
 def transformValue(threshold, value):
@@ -56,16 +56,17 @@ for j in range(k):
 #gradient descent
 for i in range(iteration):
         predictValue = hypoFunction(weights, X_train)
-        predictValue = transformValue(threshold, predictValue)
         parameterL = weights
         parameterL[0][0] = 0
         weights = weights - learningRate * np.dot(np.transpose(X_train), (predictValue - Y_train))
+        bias = bias - learningRate * np.sum(predictValue - Y_train)
         #weights = weights - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
         if i % 1000 == 0:
-                accuracy = accuracyFunction(predictValue, Y_train)
+                predictValue_t = transformValue(threshold, predictValue)
+                accuracy = accuracyFunction(predictValue_t, Y_train)
                 print(i,'training accuracy:', accuracy)       
 
-
+print(bias)
 """
 #compute validation error rate
 predictValue = hypoFunction(parameter, validSet)
@@ -77,6 +78,7 @@ print('Validation error =', errorRate)
 with open(outputName, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    writer.writerow([bias])
     for i in weights:
         writer.writerow([i[0]])
     csvfile.close()

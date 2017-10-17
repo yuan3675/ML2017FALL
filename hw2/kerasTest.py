@@ -1,44 +1,32 @@
 import sys
 import csv
 import CSVreader
-import dataProcessing
-import pandas as pd
 import numpy as np
-
-threshold = 0.5
-
-def sigmoid(z):
-        z = -1 * z
-        return 1/(1+np.exp(z))
-	
-def hypoFunction(weights, data, bias):
-        z = np.dot(data, weights) + bias
-        return sigmoid(z)
+import dataProcessing
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.models import load_model
 
 def transformValue(threshold, value):
         for i in range(len(value)):
-                if value[i] > threshold:
-                        value[i] = 1
+                if value[i][0] > threshold:
+                        value[i][0] = 1
                 else:
-                        value[i] = 0
+                        value[i][0] = 0
         return value
-
+    
+threshold = 0.5
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
-weights = reader.readParameters('parameter_logistic_first_try.csv')
-bias = weights.pop(0)
-weights = np.array(weights).astype(float)
-
-
 test = reader.readTest(sys.argv[1])
 test = np.array(test).astype(float)
 test = process.normalize(test)
-outputName = sys.argv[2]
+model = load_model(sys.argv[2])
 
-predictValue = hypoFunction(weights, test, bias)
+predictValue = model.predict(test, batch_size=128)
 predictValue = transformValue(threshold, predictValue)
 
-with open(outputName, 'w', newline='') as csvfile:
+with open(sys.argv[3], 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
     index = 0
@@ -46,6 +34,6 @@ with open(outputName, 'w', newline='') as csvfile:
     writer.writerow(csvHeader)
     for i in predictValue:
         index = index + 1
-        writer.writerow([index, int(i)])
+        writer.writerow([index, int(i[0])])
     csvfile.close()
 
