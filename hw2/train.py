@@ -8,19 +8,18 @@ import dataProcessing
 
 #define parameters
 Lambda = 0.0001
-iteration = 10001
+iteration = 1001
 learningRate = 0.000001
 weights = np.random.random((106, 1))
 outputName = sys.argv[3]
 					  
-bias = 0.005
 
 def sigmoid(z):
         z = -1 * z
         return 1/(1+np.exp(z))
 	
-def hypoFunction(weights, bias, data):
-        z = np.dot(data, weights) + bias
+def hypoFunction(weights, data):
+        z = np.dot(data, weights)
         return sigmoid(z)
 
 def errorFunction(predictValue, actualValue):
@@ -42,12 +41,12 @@ X_train = process.normalize(X_train)
 print(Y_train)
 
 for i in range(iteration):
-        predictValue = hypoFunction(weights, bias, X_train)
+        predictValue = hypoFunction(weights, X_train)
         parameterL = weights
         parameterL[0][0] = 0
         weights = weights - learningRate * np.dot(np.transpose(X_train), (predictValue - Y_train))
         #weights = weights - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
-        if i % 1000 == 0:
+        if i % 100 == 0:
                 errorRate = errorFunction(predictValue, Y_train)
                 print(i,'training error:', errorRate)
         

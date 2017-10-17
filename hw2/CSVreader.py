@@ -34,8 +34,11 @@ class CSVreader:
         with open(filename, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
+                if len(row) == 1:
+                    break
                 self.testList.append(row)
         csvfile.close()
+        self.testList.pop(0)
         return(self.testList)
 
     def readParameters(self, filename):
