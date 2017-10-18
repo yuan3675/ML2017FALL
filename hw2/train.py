@@ -1,19 +1,18 @@
 import sys
 import csv
-import math
-import pandas as pd
 import numpy as np
 import CSVreader
 import dataProcessing
 
 #define parameters
 Lambda = 0.0001
-iteration = 10001
+iteration = 5001
 learningRate = 0.0000001
 weights = np.random.random((106, 1))
 outputName = sys.argv[3]
 threshold = 0.5				  
 bias = 0.005
+bias_v = 0.005
 
 def sigmoid(z):
         z = -1 * z
@@ -48,12 +47,39 @@ X_train = np.array(X_train).astype(float)
 Y_train = np.array(Y_train).astype(float)
 X_train = process.normalize(X_train)
 
-"""
-#k-fold validation
-for j in range(k):
-"""        
 
-#gradient descent
+#k-fold validation
+total_accuracy = 0
+for i in range(10):
+        weights_v = np.random.random((106, 1))
+        x_train = process.getTrainSet(X_train, 10, i)
+        x_valid = process.getValidSet(X_train, 10, i)
+        
+        y_train = process.getTrainSet(Y_train, 10, i)
+        y_valid = process.getValidSet(Y_train, 10, i)
+        
+        for j in range(iteration):
+            predictValue = hypoFunction(weights_v, x_train)
+            parameterL = weights_v
+            parameterL[0][0] = 0
+            weights_v = weights_v - learningRate * np.dot(np.transpose(x_train), (predictValue - y_train))
+            bias_v = bias_v - learningRate * np.sum(predictValue - y_train)
+            # weights_v = weights_v - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
+            if j % 1000 == 0:
+                predictValue_t = transformValue(threshold, predictValue)
+                accuracy = accuracyFunction(predictValue_t, y_train)
+                print(j, 'training accuracy:', accuracy)
+        validValue = hypoFunction(weights_v, x_valid)
+        validValue_t = transformValue(threshold, validValue)
+        accuracy_v = accuracyFunction(validValue_t, y_valid)
+        print(i, 'validation accuracy:', accuracy_v)
+        print('===========================')
+        total_accuracy = total_accuracy + accuracy_v
+
+print('average accuracy:', total_accuracy / 10)
+        
+"""
+#train with all data
 for i in range(iteration):
         predictValue = hypoFunction(weights, X_train)
         parameterL = weights
@@ -66,14 +92,6 @@ for i in range(iteration):
                 accuracy = accuracyFunction(predictValue_t, Y_train)
                 print(i,'training accuracy:', accuracy)       
 
-print(bias)
-"""
-#compute validation error rate
-predictValue = hypoFunction(parameter, validSet)
-errorRate = costFunction(predictValue, validTargetSet, valid_m)
-print('Validation error =', errorRate)
-"""
-
 #store parameters
 with open(outputName, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
@@ -82,4 +100,4 @@ with open(outputName, 'w', newline='') as csvfile:
     for i in weights:
         writer.writerow([i[0]])
     csvfile.close()
-
+"""

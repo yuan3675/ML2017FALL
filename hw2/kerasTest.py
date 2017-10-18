@@ -15,7 +15,7 @@ def transformValue(threshold, value):
                         value[i][0] = 0
         return value
     
-threshold = 0.5
+threshold = 0.6
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
 test = reader.readTest(sys.argv[1])
