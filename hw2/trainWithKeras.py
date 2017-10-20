@@ -22,15 +22,11 @@ model.add(Dense(106, input_dim=106, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(32, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(16, activation='relu'))
-model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy',
-              optimizer='rmsprop')
-
+              optimizer='adagrad')
+"""
 #k-fold validation
 total_loss = 0
 for i in range(10):
@@ -41,20 +37,21 @@ for i in range(10):
     y_valid = process.getValidSet(Y_train, 10, i)
 
     model.fit(x_train, y_train,
-          epochs=5,
+          epochs=1,
           batch_size=128, validation_data=(x_valid, y_valid))
     loss = model.evaluate(x_valid, y_valid, batch_size=128)
     total_loss = total_loss + loss
 
 print('\naverage loss:', total_loss/10)
-
+"""
 
 #Train
 model.fit(X_train, Y_train,
-          epochs=5,
+          epochs=60,
           batch_size=128)
 score = model.evaluate(X_train, Y_train, batch_size=128)
 print(score)
+
 
 #save model
 model.save(sys.argv[3])
