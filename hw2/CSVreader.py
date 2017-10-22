@@ -1,7 +1,6 @@
 import sys
 import csv
 
-
 class CSVreader:
     def readX_Train(self, filename):
         temp = []
