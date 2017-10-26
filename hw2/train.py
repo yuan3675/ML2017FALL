@@ -48,7 +48,7 @@ X_train = np.array(X_train).astype(float)
 Y_train = np.array(Y_train).astype(float)
 X_train = process.normalize(X_train)
 
-
+"""
 #k-fold validation
 total_accuracy = 0
 for i in range(10):
@@ -61,11 +61,11 @@ for i in range(10):
         
         for j in range(iteration):
             predictValue = hypoFunction(weights_v, x_train)
-            parameterL = weights_v
-            parameterL[0][0] = 0
-            weights_v = weights_v - learningRate * np.dot(np.transpose(x_train), (predictValue - y_train))
+            #parameterL = weights_v
+            #parameterL[0][0] = 0
+            #weights_v = weights_v - learningRate * np.dot(np.transpose(x_train), (predictValue - y_train))
             bias_v = bias_v - learningRate * np.sum(predictValue - y_train)
-            # weights_v = weights_v - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
+            weights_v = weights_v - learningRate * (np.dot(np.transpose(x_train), (predictValue - y_train)) + Lambda * weights_v)
             if j % 1000 == 0:
                 predictValue_t = transformValue(threshold, predictValue)
                 accuracy = accuracyFunction(predictValue_t, y_train)
@@ -78,16 +78,16 @@ for i in range(10):
         total_accuracy = total_accuracy + accuracy_v
 
 print('average accuracy:', total_accuracy / 10)
-        
-"""
+"""     
+
 #train with all data
 for i in range(iteration):
         predictValue = hypoFunction(weights, X_train)
-        parameterL = weights
-        parameterL[0][0] = 0
-        weights = weights - learningRate * np.dot(np.transpose(X_train), (predictValue - Y_train))
+        #parameterL = weights
+        #parameterL[0][0] = 0
+        #weights = weights - learningRate * np.dot(np.transpose(X_train), (predictValue - Y_train))
         bias = bias - learningRate * np.sum(predictValue - Y_train)
-        #weights = weights - learningRate * (np.dot(np.transpose(trainSet), (predictValue - trainTargetSet)) / train_m + (Lambda / train_m) * parameterL)
+        weights = weights - learningRate * (np.dot(np.transpose(X_train), (predictValue - Y_train)) + Lambda * weights)
         if i % 1000 == 0:
                 predictValue_t = transformValue(threshold, predictValue)
                 accuracy = accuracyFunction(predictValue_t, Y_train)
@@ -101,4 +101,4 @@ with open(outputName, 'w', newline='') as csvfile:
     for i in weights:
         writer.writerow([i[0]])
     csvfile.close()
-"""
+

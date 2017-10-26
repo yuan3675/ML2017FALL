@@ -25,7 +25,7 @@ def transformValue(threshold, value):
 
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
-weights = reader.readParameters('parameter_logistic_first_try.csv')
+weights = reader.readParameters(sys.argv[2])
 bias = weights.pop(0)
 weights = np.array(weights).astype(float)
 
@@ -33,7 +33,7 @@ weights = np.array(weights).astype(float)
 test = reader.readTest(sys.argv[1])
 test = np.array(test).astype(float)
 test = process.normalize(test)
-outputName = sys.argv[2]
+outputName = sys.argv[3]
 
 predictValue = hypoFunction(weights, test, bias)
 predictValue = transformValue(threshold, predictValue)
