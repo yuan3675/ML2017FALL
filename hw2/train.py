@@ -16,7 +16,8 @@ bias_v = 0.005
 
 def sigmoid(z):
         z = -1 * z
-        return 1/(1+np.exp(z))
+        res = 1/(1+np.exp(z))
+        return np.clip(res, 0.0000000001, 0.9999999999)
 	
 def hypoFunction(weights, data):
         z = np.dot(data, weights) + bias
