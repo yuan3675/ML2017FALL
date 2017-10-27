@@ -18,15 +18,15 @@ def transformValue(threshold, value):
 threshold = 0.5
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
-test = reader.readTest(sys.argv[1])
+test = reader.readTest(sys.argv[5])
 test = np.array(test).astype(float)
 test = process.normalize(test)
-model = load_model(sys.argv[2])
+model = load_model("model_keras_first_try_adagrad.h5")
 
 predictValue = model.predict(test, batch_size=128)
 predictValue = transformValue(threshold, predictValue)
 
-with open(sys.argv[3], 'w', newline='') as csvfile:
+with open(sys.argv[6], 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
     index = 0

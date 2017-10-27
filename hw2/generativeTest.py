@@ -21,17 +21,17 @@ def transformValue(threshold, value):
 threshold = 0.5
 reader = CSVreader.CSVreader()
 process = dataProcessing.dataProcessing()
-test = reader.readTest(sys.argv[1])
+test = reader.readTest(sys.argv[5])
 test = np.array(test).astype(float)
 #test = process.normalize(test)
-w = reader.readParameters(sys.argv[2])
+w = reader.readParameters("parameter_generative_gussian.csv")
 b = w.pop(0)
 w = np.array(w).astype(float)
 
 prob = sigmoid(np.dot(test, w) + b)
 pred = transformValue(threshold, prob)
 
-with open(sys.argv[3], 'w', newline='') as csvfile:
+with open(sys.argv[6], 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
     index = 0
