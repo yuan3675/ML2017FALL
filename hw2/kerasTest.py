@@ -21,7 +21,7 @@ process = dataProcessing.dataProcessing()
 test = reader.readTest(sys.argv[5])
 test = np.array(test).astype(float)
 test = process.normalize(test)
-model = load_model("model_keras_first_try_adagrad.h5")
+model = load_model("model_keras_first_try.h5")
 
 predictValue = model.predict(test, batch_size=128)
 predictValue = transformValue(threshold, predictValue)
