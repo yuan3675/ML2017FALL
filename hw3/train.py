@@ -6,6 +6,22 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Conv2D, MaxPooling2D, Flatten, Dropout
 from keras.models import load_model
 
+def Accuracy(predict, actual):
+    temp = []
+    correct = 0
+    for i in predict:
+        index = 0
+        big = 0
+        for j in range(len(i)):
+            if i[j] >= big:
+                big = i[j]
+                index = j
+        temp.append(index)
+    for i in range(len(temp)):
+        if temp[i] == actual[i]:
+            correct += 1
+    return correct/len(temp)
+
 #get data
 print('Preprocessing......')
 reader = CSVreader.CSVreader()
@@ -15,6 +31,7 @@ X_test = reader.getX_Test(sys.argv[2])
 X_train = np.array(X_train).astype(int)
 Y_train = np.array(Y_train).astype(int)
 #X_test = np.array(X_test).astype(int)
+#print(Y_train[0])
 #print(X_test[0])
 
 
@@ -60,5 +77,7 @@ print('Train Accuracy:', score)
 
 
 #save model
+print('Saving model......')
 model.save(sys.argv[3])
+print('Done.')
 

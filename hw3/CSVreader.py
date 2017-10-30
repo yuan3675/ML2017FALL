@@ -14,10 +14,8 @@ class CSVreader:
                     self.labels.append(row[0])
                     row.pop(0)
                     splitRow = row[0].split()
-                    sr = []
-                    for i in splitRow:
-                        sr.append([i])
-                    splitRow = [sr[i:i+48] for i in range(0, len(sr), 48)]
+                    splitRow = [splitRow[i:i+1] for i in range(0, len(splitRow), 1)]
+                    splitRow = [splitRow[i:i+48] for i in range(0, len(splitRow), 48)]
                     self.features.append(splitRow)
                 self.trainingDataNum += 1
         csvfile.close()
@@ -48,7 +46,10 @@ class CSVreader:
             for row in reader:
                 row.pop(0)
                 splitRow = row[0].split()
-                splitRow = [splitRow[i:i+48] for i in range(0, len(splitRow), 48)]
+                sr = []
+                for i in splitRow:
+                    sr.append([i])
+                splitRow = [sr[i:i+48] for i in range(0, len(sr), 48)]
                 temp.append(splitRow)
         csvfile.close()
         temp.pop(0)
