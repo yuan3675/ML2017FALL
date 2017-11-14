@@ -11,7 +11,6 @@ def transformValue(predict):
     for i in predict:
         index = 0
         big = 0
-        print(i)
         for j in range(len(i)):
             if i[j] >= big:
                 big = i[j]
@@ -21,13 +20,14 @@ def transformValue(predict):
     
 reader = CSVreader.CSVreader()
 test = reader.getX_Test(sys.argv[1])
-test = np.array(test).astype(int)
+test = np.array(test).astype(float)
+test /= 255
 model = load_model(sys.argv[2])
 
 predictValue = model.predict(test)
 predictValue = transformValue(predictValue)
 
-"""
+
 with open(sys.argv[3], 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -38,4 +38,4 @@ with open(sys.argv[3], 'w', newline='') as csvfile:
         writer.writerow([index, int(i)])
         index = index + 1
     csvfile.close()
-"""
+
