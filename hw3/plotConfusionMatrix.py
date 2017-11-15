@@ -3,6 +3,7 @@ import csv
 import CSVreader
 import numpy as np
 import matplotlib.pyplot as plt
+import itertools
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.models import load_model
@@ -20,22 +21,24 @@ def transformValue(predict):
         temp.append(index)
     return temp
 
-def plotConfusionMatrix(cm, classes, title='Confusion Matrix', camp=plt.cm.Blues):
-    print(cm)
-    plt.imshow(cm, interpolation='nearest', camp=camp)
+def plotconfusionmatrix(cm, classes,
+                          title='Confusion matrix',
+                          cmap=plt.cm.jet):
+    """
+    This function prints and plots the confusion matrix.
+    """
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
     plt.colorbar()
     tick_marks = np.arange(len(classes))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
 
-    fmt = '.2f' if normalize else 'd'
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, format(cm[i, j], fmt),
-                 horizontalalignment="center",
+        plt.text(j, i, '{:.2f}'.format(cm[i, j]), horizontalalignment="center",
                  color="white" if cm[i, j] > thresh else "black")
-
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
@@ -54,15 +57,16 @@ model = load_model(sys.argv[2])
 
 predictValue = model.predict(X_valid)
 predictValue = transformValue(predictValue)
+Y_valid = transformValue(Y_valid)
 
 cnf_matrix = confusion_matrix(Y_valid, predictValue)
 np.set_printoptions(precision=2)
 
 # Plot non-normalized confusion matrix
-class_names = (0, 1, 2, 3, 4, 5, 6)
+class_names = ["Angry","Disgust","Fear","Happy","Sad","Surprise","Neutral"]
 
 plt.figure()
-plot_confusion_matrix(cnf_matrix, classes=class_names,
-                      title='Confusion Matrix')
+plotconfusionmatrix(cnf_matrix, classes=class_names)
 
 plt.show()
+
