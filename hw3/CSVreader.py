@@ -20,6 +20,20 @@ class CSVreader:
                 self.trainingDataNum += 1
         csvfile.close()
         return(self.features)
+    
+    def getDNNX_Train(self, filename):
+        with open(filename, newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                if self.trainingDataNum != -1:
+                    self.labels.append(row[0])
+                    row.pop(0)
+                    splitRow = row[0].split()
+                    splitRow = [splitRow[i:i+48] for i in range(0, len(splitRow), 48)]
+                    self.features.append(splitRow)
+                self.trainingDataNum += 1
+        csvfile.close()
+        return(self.features)
 
     def getY_Train(self):
         for i in range(len(self.labels)):

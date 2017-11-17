@@ -23,6 +23,7 @@ Y_train = reader.getY_Train()
 X_train = np.array(X_train).astype(float)
 X_train /= 255
 Y_train = np.array(Y_train).astype(int)
+X_train = X_train.reshape(X_train.shape[0], 48*48)
 
 X_train, X_valid = X_train[:-3000], X_train[-3000:]
 Y_train, Y_valid = Y_train[:-3000], Y_train[-3000:]
