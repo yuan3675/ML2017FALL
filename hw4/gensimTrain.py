@@ -49,9 +49,9 @@ for sequence in X_valid:
 word2VecModel = word2vec.Word2Vec.load("allSequences.bin")
 
 #encode sequences
+#print('start padding')
 encodedTrain = []
 encodedValid = []
-print('Start encoding')
 for sequence in newX_train:
     encodedSequence = []
     for word in sequence:
@@ -77,7 +77,6 @@ for sequence in newX_valid:
     encodedValid.append(encodedSequence)
 
 #pad X_train and X_valid to  a max length of 40 words
-print('Start padding')
 maxLength = 40        
 paddedTrain = pad_sequences(encodedTrain, maxlen = maxLength, dtype = 'float64', padding = 'post')
 paddedValid = pad_sequences(encodedValid, maxlen = maxLength, dtype = 'float64', padding = 'post')

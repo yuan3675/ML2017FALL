@@ -47,9 +47,9 @@ def highPercentageTransform(trainingData, predictLabel):
 #read data
 reader = FileReader.FileReader()
 X_test = reader.getX_Test(sys.argv[1])
-
+#X_test = ['today is a good day, but it is hot']
 #load model
-model = load_model('Model\model-00031-0.82305.h5')
+model = load_model('Model/model-00031-0.82305.h5')
 
 #delete noisy word
 stopList = set('for a of the and to in .'.split())
