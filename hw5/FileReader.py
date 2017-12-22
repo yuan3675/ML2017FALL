@@ -63,7 +63,7 @@ class FileReader:
         userID = np.array(data[:, 1], dtype=int)
         movieID = np.array(data[:, 2], dtype=int)
         rating = np.array(data[:, 3], dtype=int)
-        return userID, movieID, rating, index
+        return userID, movieID, rating
 
     def getIDs(self, data):
         userID = np.array(data[:, 1], dtype=int)
