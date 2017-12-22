@@ -10,7 +10,8 @@ from keras.callbacks import ModelCheckpoint
 
 reader = FileReader.FileReader()
 train = reader.readTrain(sys.argv[1])
-userID, movieID, rating = reader.getIDandRating(train)
+userID, movieID, rating, index = reader.getIDandRating(train)
+
 
 n_users = np.max(userID) + 1
 n_movies = np.max(movieID) + 1
@@ -62,15 +63,16 @@ callbacks = []
 callbacks.append(ModelCheckpoint('Model\model-{epoch:05d}-{val_rmse:.5f}.h5', monitor='val_rmse', mode = 'min', save_best_only=True, period=1))
 
 history = model.fit(
-    [userID, movieID], norm_rating,
+    [userID, movieID], rating,
     epochs = 300,
     batch_size = 10000,
     validation_split = 0.05,
     callbacks = callbacks
     )
 
+"""
 #save history
 with open('reportQ1History', 'wb') as file_pi:
     pickle.dump(history.history, file_pi)
-
+"""
 
